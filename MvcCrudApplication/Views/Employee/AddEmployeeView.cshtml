@@ -1,0 +1,116 @@
+﻿<!--@Model IEnumerable<MvcCrudApplication.Models.Departments>-->
+@model List<MvcCrudApplication.Models.Department>
+
+@{
+    ViewBag.Title = "AddEmployeeView";
+}
+
+<h2>AddEmployeeView</h2>
+
+
+<form action="Saveemp" method="post" new { enctype = "multipart/form-data" }>
+    <table>
+        <tr>
+            <td>
+                <label>FirstName</label>
+            </td>
+            <td>
+                <input type="text" name="FirstName">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <label>lastName</label>
+            </td>
+            <td>
+                <input type="text" name="LastName">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <label for="email">Email</label>
+            </td>
+            <td>
+                <input type="text" name="EmailAddress">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="MobileNumber">MobileNumber</label>
+            </td>
+            <td>
+                <input type="text" name="MobileNumber">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <label>Gender</label>
+            </td>
+            <td>
+                <label>
+                    <input type="radio" value="female" name="Gender"> Female
+                </label>
+                <label>
+                    <input value="male" type="radio" name="Gender"> Male
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Department</label>
+            </td>
+            <td>
+                <select name="DepartmentId">
+                    <option disabled selected>--Choose Department--</option>
+                    @foreach (var item in Model)
+                    {
+                        <!-- <option value=></option>-->
+                        <option value="@item.DepartmentId">@item.DepartmentName</option>
+
+                    }
+
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Address</label>
+            </td>
+            <td>
+                <textarea rows="4" cols="40" name="Address"></textarea>
+            </td>
+        </tr>
+
+      <tr>
+         <td>
+             <label>attach your profile image</label>
+
+         </td>
+
+         <td>
+
+             <input type="file" name="ProfileImage" enctype = "multipart/form-data" />
+
+         </td>
+
+     </tr>
+
+
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Submit">
+
+            </td>
+        </tr>
+    </table>
+</form>
+

@@ -1,0 +1,55 @@
+﻿@model List<MvcCrudApplication.Models.Employee>
+    @{
+        ViewBag.Title = "ListView";
+    }
+
+  
+
+    <h2>List Of Employees</h2>
+
+
+    <table border="1">
+
+        <tr>
+            <th>EmployeeId</th>
+            <th>FirstName</th>
+            <th>lastName</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>MobileNumber</th>
+            <th>DepartmentId</th>
+            <th>ProfileImage</th>
+            <th>Imageview</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var emp in Model)
+        {        
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => @emp.EmployeeId)
+                </td>
+
+
+                <td>@Html.DisplayFor(modelItem => @emp.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.LastName)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.EmailAddress)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.Gender)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.Address)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.MobileNumber)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.DepartmentId)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.ProfileImage)</td>
+                <td><img src="@emp.ProfileImage" width="100"></td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId })|
+                    @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeId }) 
+                    
+                    <!--  <a href="DeleteData/{ id = emp.EmployeeId }">Delete</a>-->
+
+                </td>
+
+            </tr>
+        }
+
+    </table>

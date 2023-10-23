@@ -1,0 +1,165 @@
+﻿@*@model MvcCrudApplication.Models.Employee*@
+@model MvcCrudApplication.Models.ViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Employee</h2>
+
+<!--<form action="Updatedata" method="post"> -->
+
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+
+    <div class="form-horizontal">
+
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Employee.EmployeeId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Employee.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Employee.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Employee.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee.MobileNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Employee.MobileNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Employee.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee.Gender, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Employee.Gender, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.RadioButtonFor(m => m.Employee.Gender, "Male") Male
+            @Html.RadioButtonFor(m => m.Employee.Gender, "Female")Female
+        </div>
+
+
+        @*<tr>
+            <td>
+                <label>Gender</label>
+            </td>
+            <td>
+                <label>
+                    <input type="radio" value="female" name="Gender"> Female
+                </label>
+                <label>
+                    <input value="male" type="radio" name="Gender"> Male
+                </label>
+            </td>
+        </tr>*@
+
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Employee.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Employee.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        @*<div>
+            @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-1" })
+            @Html.TextAreaFor(m => m.Employee.Address)
+        </div>*@
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Employee.Address, new
+                {
+                    @class = "form-control",
+                    @rows = 5,
+                    @cols = 40,
+               style = "border: 1px solid #ccc;"
+                })
+                @Html.ValidationMessageFor(model => model.Employee.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <tr>
+            <td>
+                <label>Select Department</label>
+            </td>
+            <td>
+
+                <select name="DepartmentId">
+
+                    @foreach (var item in Model.Departments)
+                    {
+                       
+                        <option value="@item.DepartmentId">@item.DepartmentName</option>
+
+                    }
+
+                </select>
+
+            </td>
+        </tr>
+
+        @*@Html.DropDownListFor(model => model.DepartmentId,Model.Department, "--Select --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })*@
+
+
+
+        <div>
+            <tr>
+                <td>
+                    <label>change profile image</label>
+
+                </td>
+
+                <td>
+
+
+
+                    <img src="@Model.Employee.ProfileImage" alt="Your Image" />
+                    <input type="file" name="ProfileImage" enctype="multipart/form-data" />
+                </td>
+
+            </tr>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+}
