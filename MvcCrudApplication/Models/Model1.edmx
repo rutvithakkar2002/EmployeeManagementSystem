@@ -23,8 +23,15 @@
           <Property Name="Address" Type="varchar" MaxLength="400" />
           <Property Name="MobileNumber" Type="varchar" MaxLength="10" />
           <Property Name="EmailAddress" Type="varchar" MaxLength="100" />
-          <Property Name="DepartmentId" Type="int" Nullable="false" />
           <Property Name="ProfileImage" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="EmployeeDepartment">
+          <Key>
+            <PropertyRef Name="Emp_Dep_Id" />
+          </Key>
+          <Property Name="Emp_Dep_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -36,15 +43,27 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
-        <Association Name="FK_Employee_Department">
+        <Association Name="FK_EmployeeDepartment_Department1">
           <End Role="Department" Type="Self.Department" Multiplicity="1" />
-          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <End Role="EmployeeDepartment" Type="Self.EmployeeDepartment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
               <PropertyRef Name="DepartmentId" />
             </Principal>
-            <Dependent Role="Employee">
+            <Dependent Role="EmployeeDepartment">
               <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeDepartment_EmployeeDepartment">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmployeeDepartment" Type="Self.EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="EmployeeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -82,69 +101,22 @@
         <EntityContainer Name="AvidclanCompanyModelStoreContainer">
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeDepartment" EntityType="Self.EmployeeDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
+          <AssociationSet Name="FK_EmployeeDepartment_Department1" Association="Self.FK_EmployeeDepartment_Department1">
             <End Role="Department" EntitySet="Department" />
-            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartment" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="FK_EmployeeDepartment_EmployeeDepartment" Association="Self.FK_EmployeeDepartment_EmployeeDepartment">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartment" />
+          </AssociationSet>
+          </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AvidclanCompanyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="DepartmentId" />
-          </Key>
-          <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_Department" FromRole="Department" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="Employee">
-          <Key>
-            <PropertyRef Name="EmployeeId" />
-          </Key>
-          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="MobileNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Department" Relationship="Self.FK_Employee_Department" FromRole="Employee" ToRole="Department" />
-          <Property Name="ProfileImage" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <Association Name="FK_Employee_Department">
-          <End Role="Department" Type="Self.Department" Multiplicity="1" />
-          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="DepartmentId" />
-            </Principal>
-            <Dependent Role="Employee">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="AvidclanCompanyEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Departments" EntityType="Self.Department" />
-          <EntitySet Name="Employees" EntityType="Self.Employee" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Employee" EntitySet="Employees" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -175,7 +147,19 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-        </EntityContainer>
+          <EntitySet Name="Departments" EntityType="AvidclanCompanyModel.Department" />
+          <EntitySet Name="Employees" EntityType="AvidclanCompanyModel.Employee" />
+          <EntitySet Name="EmployeeDepartments" EntityType="AvidclanCompanyModel.EmployeeDepartment" />
+          <EntitySet Name="sysdiagrams" EntityType="AvidclanCompanyModel.sysdiagram" />
+          <AssociationSet Name="FK_EmployeeDepartment_Department1" Association="AvidclanCompanyModel.FK_EmployeeDepartment_Department1">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeDepartment_EmployeeDepartment" Association="AvidclanCompanyModel.FK_EmployeeDepartment_EmployeeDepartment">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeeDepartment" EntitySet="EmployeeDepartments" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -187,46 +171,78 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-      </Schema>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EmployeeDepartments" Relationship="AvidclanCompanyModel.FK_EmployeeDepartment_Department1" FromRole="Department" ToRole="EmployeeDepartment" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="MobileNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProfileImage" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EmployeeDepartments" Relationship="AvidclanCompanyModel.FK_EmployeeDepartment_EmployeeDepartment" FromRole="Employee" ToRole="EmployeeDepartment" />
+        </EntityType>
+        <EntityType Name="EmployeeDepartment">
+          <Key>
+            <PropertyRef Name="Emp_Dep_Id" />
+          </Key>
+          <Property Name="Emp_Dep_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="AvidclanCompanyModel.FK_EmployeeDepartment_Department1" FromRole="EmployeeDepartment" ToRole="Department" />
+          <NavigationProperty Name="Employee" Relationship="AvidclanCompanyModel.FK_EmployeeDepartment_EmployeeDepartment" FromRole="EmployeeDepartment" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_EmployeeDepartment_Department1">
+          <End Type="AvidclanCompanyModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="AvidclanCompanyModel.EmployeeDepartment" Role="EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeDepartment_EmployeeDepartment">
+          <End Type="AvidclanCompanyModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="AvidclanCompanyModel.EmployeeDepartment" Role="EmployeeDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmployeeDepartment">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AvidclanCompanyModelStoreContainer" CdmEntityContainer="AvidclanCompanyEntities1">
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="AvidclanCompanyModel.Department">
-              <MappingFragment StoreEntitySet="Department">
-                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
-                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="AvidclanCompanyModel.Employee">
-              <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
-                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
-                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
-                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="AvidclanCompanyModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="AvidclanCompanyModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="AvidclanCompanyModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="AvidclanCompanyModel.Store.sp_dropdiagram" />
@@ -251,7 +267,49 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="AvidclanCompanyModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="AvidclanCompanyModel.Store.sp_upgraddiagrams" />
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="AvidclanCompanyModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="AvidclanCompanyModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeDepartments">
+            <EntityTypeMapping TypeName="AvidclanCompanyModel.EmployeeDepartment">
+              <MappingFragment StoreEntitySet="EmployeeDepartment">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Emp_Dep_Id" ColumnName="Emp_Dep_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="AvidclanCompanyModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

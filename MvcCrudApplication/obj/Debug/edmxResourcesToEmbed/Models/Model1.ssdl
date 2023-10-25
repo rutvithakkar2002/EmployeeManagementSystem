@@ -18,8 +18,15 @@
     <Property Name="Address" Type="varchar" MaxLength="400" />
     <Property Name="MobileNumber" Type="varchar" MaxLength="10" />
     <Property Name="EmailAddress" Type="varchar" MaxLength="100" />
-    <Property Name="DepartmentId" Type="int" Nullable="false" />
     <Property Name="ProfileImage" Type="varchar" MaxLength="1000" />
+  </EntityType>
+  <EntityType Name="EmployeeDepartment">
+    <Key>
+      <PropertyRef Name="Emp_Dep_Id" />
+    </Key>
+    <Property Name="Emp_Dep_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmployeeId" Type="int" Nullable="false" />
+    <Property Name="DepartmentId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
@@ -31,15 +38,27 @@
     <Property Name="version" Type="int" />
     <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
-  <Association Name="FK_Employee_Department">
+  <Association Name="FK_EmployeeDepartment_Department1">
     <End Role="Department" Type="Self.Department" Multiplicity="1" />
-    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <End Role="EmployeeDepartment" Type="Self.EmployeeDepartment" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Department">
         <PropertyRef Name="DepartmentId" />
       </Principal>
-      <Dependent Role="Employee">
+      <Dependent Role="EmployeeDepartment">
         <PropertyRef Name="DepartmentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EmployeeDepartment_EmployeeDepartment">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="EmployeeDepartment" Type="Self.EmployeeDepartment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="EmployeeDepartment">
+        <PropertyRef Name="EmployeeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -77,10 +96,15 @@
   <EntityContainer Name="AvidclanCompanyModelStoreContainer">
     <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmployeeDepartment" EntityType="Self.EmployeeDepartment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
+    <AssociationSet Name="FK_EmployeeDepartment_Department1" Association="Self.FK_EmployeeDepartment_Department1">
       <End Role="Department" EntitySet="Department" />
+      <End Role="EmployeeDepartment" EntitySet="EmployeeDepartment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EmployeeDepartment_EmployeeDepartment" Association="Self.FK_EmployeeDepartment_EmployeeDepartment">
       <End Role="Employee" EntitySet="Employee" />
+      <End Role="EmployeeDepartment" EntitySet="EmployeeDepartment" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

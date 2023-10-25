@@ -1,4 +1,6 @@
 ﻿@model List<MvcCrudApplication.Models.Employee>
+
+
     @{
         ViewBag.Title = "ListView";
     }
@@ -38,17 +40,21 @@
                 <td>@Html.DisplayFor(modelItem => @emp.Gender)</td>
                 <td>@Html.DisplayFor(modelItem => @emp.Address)</td>
                 <td>@Html.DisplayFor(modelItem => @emp.MobileNumber)</td>
-                <td>@Html.DisplayFor(modelItem => @emp.DepartmentId)</td>
+                @*   <td>@Html.DisplayFor(modelItem => @emp.DepartmentId)</td>*@
                 <td>@Html.DisplayFor(modelItem => @emp.ProfileImage)</td>
-                <td><img src="@emp.ProfileImage" width="100"></td>
+
+                <td><img src="@emp.ProfileImage" width="50"></td>
+                @*<td><img src="~/Images/Profile Images/1051/1523126565865.jpg" width="50"></td>*@
+
+                @*<td><img src="~/Images/Profile Images/1051/1523126565865.jpg" width="50"></td>*@
+                
                 <td>
                     @Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId })|
-                    @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeId }) 
-                    
+                    @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeId })
+
                     <!--  <a href="DeleteData/{ id = emp.EmployeeId }">Delete</a>-->
 
                 </td>
-
             </tr>
         }
 

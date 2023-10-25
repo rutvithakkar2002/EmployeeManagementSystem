@@ -13,6 +13,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
+using System.Text.RegularExpressions;
+
 namespace MvcCrudApplication.Controllers
 {
     public class EmployeeController : Controller
@@ -37,7 +39,7 @@ namespace MvcCrudApplication.Controllers
 
         [HttpPost]
         //    public ActionResult Saveemp(EmployeeModel employee)
-        public ActionResult Saveemp(Employee employee, HttpPostedFileBase ProfileImage)
+        public ActionResult Saveemp(Employee employee,EmployeeDepartment employeeDepartment, HttpPostedFileBase ProfileImage, int[] DepartmentsIds)
         {
             // To open a connection to the database
             try
@@ -46,8 +48,16 @@ namespace MvcCrudApplication.Controllers
                 {
                     // Add data to the particular table
                     context.Employees.Add(employee);
-                    context.SaveChanges();
-                    // save the changes
+                    context.SaveChanges();  // save the changes
+
+
+                    employeeDepartment.EmployeeId = employee.EmployeeId;
+                    foreach (var value in DepartmentsIds)
+                    {
+                        employeeDepartment.DepartmentId= value;
+                        context.EmployeeDepartment.Add(employeeDepartment);
+                        context.SaveChanges();
+                    }
 
                 }
                 if (ProfileImage != null && ProfileImage.ContentLength > 0)
@@ -78,18 +88,17 @@ namespace MvcCrudApplication.Controllers
                                 //string saveloc=Server.MapPath(fullPath+"\\"+ imagename);
                                 string fullPath = Path.Combine(rootfolder, subfolderpath);
                                 string saveloc = Path.Combine(fullPath, imagename);
-                               
-                                
+                                  
                                 ProfileImage.SaveAs(saveloc);
 
-                                employee.ProfileImage=saveloc;
+                                string newPath = Regex.Replace(saveloc, @"\\", "/");
+                                employee.ProfileImage=newPath;
+
                                 using (var context = new AvidclanCompanyEntities1())
                                 {
                                     context.Employees.AddOrUpdate(employee);
                                     context.SaveChanges();
                                 }
-
-
                             }
                         }
                         catch (Exception ex)
@@ -187,7 +196,7 @@ namespace MvcCrudApplication.Controllers
                     data.MobileNumber = model.Employee.MobileNumber;
                     data.Gender = model.Employee.Gender;
                     //model.Employee.ProfileImage = ProfileImage.ToString();
-                    model.Employee.DepartmentId = model.DepartmentId;
+             //       model.Employee.DepartmentId = model.DepartmentId;
 
                     try
                     {
@@ -236,5 +245,5 @@ namespace MvcCrudApplication.Controllers
                return View();
             }
         }
-  }
+    }
 }

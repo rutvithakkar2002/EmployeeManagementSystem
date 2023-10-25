@@ -12,18 +12,14 @@ namespace MvcCrudApplication.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class EmployeeDepartment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Department()
-        {
-            this.EmployeeDepartments = new HashSet<EmployeeDepartment>();
-        }
-    
+        public int Emp_Dep_Id { get; set; }
+        public int EmployeeId { get; set; }
         public int DepartmentId { get; set; }
-        public string DepartmentName { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeDepartment> EmployeeDepartments { get; set; }
+        public List<Department> Departments { get; set; }=new List<Department>();   
+        public virtual Department Department { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

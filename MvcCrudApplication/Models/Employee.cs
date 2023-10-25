@@ -14,6 +14,12 @@ namespace MvcCrudApplication.Models
     
     public partial class Employee
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Employee()
+        {
+            this.EmployeeDepartments = new HashSet<EmployeeDepartment>();
+        }
+    
         public int EmployeeId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -21,9 +27,9 @@ namespace MvcCrudApplication.Models
         public string Address { get; set; }
         public string MobileNumber { get; set; }
         public string EmailAddress { get; set; }
-        public int DepartmentId { get; set; }
         public string ProfileImage { get; set; }
     
-        public virtual Department Department { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeDepartment> EmployeeDepartments { get; set; }
     }
 }

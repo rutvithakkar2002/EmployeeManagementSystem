@@ -4,113 +4,147 @@
 @{
     ViewBag.Title = "AddEmployeeView";
 }
-
-<h2>AddEmployeeView</h2>
-
-
-<form action="Saveemp" method="post" new { enctype = "multipart/form-data" }>
-    <table>
-        <tr>
-            <td>
-                <label>FirstName</label>
-            </td>
-            <td>
-                <input type="text" name="FirstName">
-            </td>
-        </tr>
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+</head>
+<body>
+    <h2>AddEmployeeView</h2>
 
 
-        <tr>
-            <td>
-                <label>lastName</label>
-            </td>
-            <td>
-                <input type="text" name="LastName">
-            </td>
-        </tr>
+    <form action="Saveemp" method="post" new { enctype="multipart/form-data" }>
+        <table>
+            <tr>
+                <td>
+                    <label>FirstName</label>
+                </td>
+                <td>
+                    <input type="text" name="FirstName">
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>LastName</label>
+                </td>
+                <td>
+                    <input type="text" name="LastName">
+                </td>
+            </tr>
 
 
-        <tr>
-            <td>
-                <label for="email">Email</label>
-            </td>
-            <td>
-                <input type="text" name="EmailAddress">
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <label for="email">Email</label>
+                </td>
+                <td>
+                    <input type="text" name="EmailAddress">
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <label for="MobileNumber">MobileNumber</label>
-            </td>
-            <td>
-                <input type="text" name="MobileNumber">
-            </td>
-        </tr>
-
-
-        <tr>
-            <td>
-                <label>Gender</label>
-            </td>
-            <td>
-                <label>
-                    <input type="radio" value="female" name="Gender"> Female
-                </label>
-                <label>
-                    <input value="male" type="radio" name="Gender"> Male
-                </label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Department</label>
-            </td>
-            <td>
-                <select name="DepartmentId">
-                    <option disabled selected>--Choose Department--</option>
-                    @foreach (var item in Model)
-                    {
-                        <!-- <option value=></option>-->
-                        <option value="@item.DepartmentId">@item.DepartmentName</option>
-
-                    }
-
-                </select>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Address</label>
-            </td>
-            <td>
-                <textarea rows="4" cols="40" name="Address"></textarea>
-            </td>
-        </tr>
-
-      <tr>
-         <td>
-             <label>attach your profile image</label>
-
-         </td>
-
-         <td>
-
-             <input type="file" name="ProfileImage" enctype = "multipart/form-data" />
-
-         </td>
-
-     </tr>
+            <tr>
+                <td>
+                    <label for="MobileNumber">MobileNumber</label>
+                </td>
+                <td>
+                    <input type="text" name="MobileNumber">
+                </td>
+            </tr>
 
 
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Submit">
+            <tr>
+                <td>
+                    <label>Gender</label>
+                </td>
+                <td>
+                    <label>
+                        <input type="radio" value="female" name="Gender"> Female
+                    </label>
+                    <label>
+                        <input value="male" type="radio" name="Gender"> Male
+                    </label>
+                </td>
+            </tr>
 
-            </td>
-        </tr>
-    </table>
-</form>
 
+            <tr>
+                <td>
+                    <label>Department</label>
+                </td>
+                <td>
+                    <select name="DepartmentsIds[]" multiple="multiple">
+                        <option disabled selected>--Choose Department--</option>
+                        @foreach (var item in Model)
+                        {
+                            <!-- <option value=></option>-->
+                            <option value="@item.DepartmentId">@item.DepartmentName</option>
+                        }
+
+                    </select>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label>Address</label>
+                </td>
+                <td>
+                    <textarea rows="4" cols="40" name="Address"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label>attach your profile image</label>
+
+                </td>
+
+                <td>
+
+                    <input type="file" name="ProfileImage" enctype="multipart/form-data" />
+
+                </td>
+
+            </tr>
+
+
+            @*<tr>
+                    <td>
+                        @Html.Label("Departments")
+                        <select name="Departments" id="Departments" multiple="multiple">
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.DepartmentId @(selectedDepartments.Contains(item.DepartmentName) ? "selected" : "")">@item.DepartmentName</option>
+                            }
+                        </select>
+                    </td>
+                </tr>*@
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Submit">
+
+                </td>
+            </tr>
+        </table>
+    </form>
+    <!--   <script type="text/javascript">
+           $(document).ready(function () {
+               $('#Department').multiselect();
+           });
+       </script>-->
+
+</body>
+</html>
