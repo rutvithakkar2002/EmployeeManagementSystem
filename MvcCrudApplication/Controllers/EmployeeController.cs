@@ -58,7 +58,6 @@ namespace MvcCrudApplication.Controllers
                         context.EmployeeDepartment.Add(employeeDepartment);
                         context.SaveChanges();
                     }
-
                 }
                 if (ProfileImage != null && ProfileImage.ContentLength > 0)
                 {
@@ -92,6 +91,9 @@ namespace MvcCrudApplication.Controllers
                                 ProfileImage.SaveAs(saveloc);
 
                                 string newPath = Regex.Replace(saveloc, @"\\", "/");
+
+                           //     string path = "~/Images/Profile Images/" + employee.EmployeeId + "/"+imagename;
+
                                 employee.ProfileImage=newPath;
 
                                 using (var context = new AvidclanCompanyEntities1())
