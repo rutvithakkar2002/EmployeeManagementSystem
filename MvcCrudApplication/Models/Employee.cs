@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+
 namespace MvcCrudApplication.Models
 {
     using System;
@@ -19,15 +20,29 @@ namespace MvcCrudApplication.Models
         {
             this.EmployeeDepartments = new HashSet<EmployeeDepartment>();
         }
-    
+
+        
         public int EmployeeId { get; set; }
+
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
+
         public string Gender { get; set; }
+
+     
         public string Address { get; set; }
+
         public string MobileNumber { get; set; }
+
         public string EmailAddress { get; set; }
+
         public string ProfileImage { get; set; }
+
+
+
+
+        public string DepartmentName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmployeeDepartment> EmployeeDepartments { get; set; }

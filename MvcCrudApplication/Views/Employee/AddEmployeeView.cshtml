@@ -9,62 +9,12 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-    
-   
-    
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-    <style>
-        .dropdown-check-list {
-            display: inline-block;
-        }
-
-            .dropdown-check-list .anchor {
-                position: relative;
-                cursor: pointer;
-                display: inline-block;
-                padding: 5px 50px 5px 10px;
-                border: 1px solid #ccc;
-            }
-
-                .dropdown-check-list .anchor:after {
-                    position: absolute;
-                    content: "";
-                    border-left: 2px solid black;
-                    border-top: 2px solid black;
-                    padding: 5px;
-                    right: 10px;
-                    top: 20%;
-                    -moz-transform: rotate(-135deg);
-                    -ms-transform: rotate(-135deg);
-                    -o-transform: rotate(-135deg);
-                    -webkit-transform: rotate(-135deg);
-                    transform: rotate(-135deg);
-                }
-
-                .dropdown-check-list .anchor:active:after {
-                    right: 8px;
-                    top: 21%;
-                }
-
-            .dropdown-check-list ul.items {
-                padding: 2px;
-                display: none;
-                margin: 0;
-                border: 1px solid #ccc;
-                border-top: none;
-            }
-
-                .dropdown-check-list ul.items li {
-                    list-style: none;
-                }
-    </style>
-
+   
 </head>
 <body>
     <h2>AddEmployeeView</h2>
-
 
     <form id="departmentarray" action="Saveemp" method="post" new { enctype="multipart/form-data" } onsubmit="return processFields()">
         <table>
@@ -129,30 +79,30 @@
 
 
 
+            @* <tr>
+            <td>
+                <label>Department</label>
+            </td>
+            <td>
+                <div id="list1" style="position: relative; top: 1px; left: 1px;bottom : 100px;" class="dropdown-check-list" tabindex="100">
+                    <span class="anchor">Select Departments</span>
+                    <ul id="items" class="items">
 
-            <tr>
-                <td>
-                    <label>Department</label>
-                </td>
-                <td>
-                    <div id="list1" style="position: relative; top: 1px; left: 1px;bottom : 100px;" class="dropdown-check-list" tabindex="100">
-                        <span class="anchor">Select Departments</span>
-                        <ul id="items" class="items">
+                        @foreach (var item in Model)
+                        {
+                            <li><input type="checkbox" value="@item.DepartmentId" />@item.DepartmentName </li>
+                        }
 
-                            @foreach (var item in Model)
-                            {
-                                <li id="departmentarray"><input type="checkbox" value="@item.DepartmentId" />@item.DepartmentName </li>
-                            }
+                    </ul>
+                </div>
 
-                        </ul>
-                    </div>
-
-                </td>
-            </tr>
-
+            </td>
+        </tr>*@
 
 
-           
+
+
+
             <tr>
                 <td>
                     <label>Department</label>
@@ -197,23 +147,11 @@
             </tr>
 
 
-            @*<tr>
-            <td>
-                @Html.Label("Departments")
-                <select name="Departments" id="Departments" multiple="multiple">
-                    @foreach (var item in Model)
-                    {
-                        <option value="@item.DepartmentId @(selectedDepartments.Contains(item.DepartmentName) ? "selected" : "")">@item.DepartmentName</option>
-                    }
-                </select>
-            </td>
-        </tr>*@
-
 
             <tr>
                 <td></td>
                 <td>
-                    <input type="submit" value="Submit" onclick="getSelectedCheckboxes()">
+                    <input type="submit" value="Submit" onclick="getselectedcheckboxes()">
 
                 </td>
             </tr>
@@ -221,48 +159,8 @@
     </form>
   
     <script>
-        var checkList = document.getElementById('list1');
-        var items = document.getElementById('items');
-        checkList.getElementsByClassName('anchor')[0].onclick = function (evt)
-        {
-            if (items.classList.contains('visible'))
-            {
-                items.classList.remove('visible');
-                items.style.display = "none";
-            }
-            else
-            {
-                 items.classList.add('visible');
-                 items.style.display = "block";
-            }
-        }
 
-        function getselectedcheckboxes() {
-           var checkboxes = document.queryselectorall('#departmentarray input[type="checkbox"]:checked');
-            var departmentsids = [];
 
-            checkboxes.foreach(function (checkbox) {
-                if (checkbox.checked) {
-                   departmentsids.push(checkbox.value);
-                }
-                submitform(departmentsids);
-            });
-
-        //    function submitform(departmentsids) {
-        //        $.ajax({
-        //            url: "/employee/saveemp",
-        //            method: "post",
-        //            data: departmentsids,
-        //            success: function (data) {
-        //                alert(data)
-        //                data = json.parse(data);
-        //                console.log(data);
-        //            },
-        //            error: function (err) {
-        //                console.error(err);
-        //            }
-        //        })
-        //    }
     </script>
 </body>
 </html>

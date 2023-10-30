@@ -18,7 +18,7 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("NewEmployee", "AddEmployeeView", "Employee", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("NewEmployee", "Edit", "Employee", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("ListEmployee", "ListView", "Employee", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
             </div>
@@ -34,6 +34,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
