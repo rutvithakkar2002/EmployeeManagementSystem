@@ -4,6 +4,13 @@
 @{
     ViewBag.Title = "ListView";
 }
+@*@{
+
+    var departmentNames = ViewBag.DepartmentNames as List<string>;
+    string departmentList = string.Join(", ", departmentNames);
+    <p>@departmentList</p>
+
+}*@
 <html>
 <head>
     <meta charset="utf-8">
@@ -155,6 +162,8 @@
                 <td>@Html.DisplayFor(modelItem => @emp.Gender)</td>
                 <td>@Html.DisplayFor(modelItem => @emp.Address)</td>
                 <td>@Html.DisplayFor(modelItem => @emp.MobileNumber)</td>
+
+                @*<td>@departmentList</td>*@
                 @*   <td>@Html.DisplayFor(modelItem => @emp.DepartmentId)</td>*@
                 @*<td>@Html.DisplayFor(modelItem=>emp.EmployeeDepartments)</td>*@
 
@@ -203,27 +212,38 @@
             </div>
         </div>*@
 
-<script>
-    function confirmDelete() {
-         
+    <script>
+        function confirmDelete() {
+
             if (confirm("Are You sure you want to delete this record?") == true) {
 
                 deleteEmployee();
-            
-            } 
 
-    }
+            }
+            else {
+               // cancelView();
+            }
 
-    function deleteEmployee(employeeId) {
-        // Send the DELETE request
+        }
 
-        const apiUrl = `/Employee/Delete/${employeeId}`;
+        function deleteEmployee(employeeId) {
+            // Send the DELETE request
 
-        fetch(apiUrl, {
-            method: 'DELETE'
-        })
-    }
-</script>
+            const apiUrl = `/Employee/Delete/${employeeId}`;
+
+            fetch(apiUrl, {
+                method: 'DELETE'
+            })
+        }
+
+
+        function cancelView() {
+
+            const apiUrl = `/Employee/ListView`;
+
+        }
+
+    </script>
 
 
 </body>

@@ -21,7 +21,8 @@
             @Html.LabelFor(model => model.Employee.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @*@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            
             </div>
         </div>
 
@@ -29,7 +30,7 @@
             @Html.LabelFor(model => model.Employee.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @*@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -38,7 +39,7 @@
             @Html.LabelFor(model => model.Employee.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
-                @*@Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -47,7 +48,7 @@
             @Html.LabelFor(model => model.Employee.MobileNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @*@Html.ValidationMessageFor(model => model.MobileNumber, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.MobileNumber, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -63,7 +64,7 @@
             @Html.RadioButtonFor(m => m.Employee.Gender, "Male") Male
             @Html.RadioButtonFor(m => m.Employee.Gender, "Female")Female
 
-            @*@Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })*@
+            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
 
         </div>
 
@@ -107,7 +108,7 @@
                     @cols = 40,
                style = "border: 1px solid #ccc;"
                 })
-                @*@Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -117,7 +118,7 @@
                 <label>Department</label>
             </td>
             <td>
-                <select name="DepartmentIds[]" multiple="multiple">
+                <select name="DepartmentIds[]" multiple="multiple" required>
                     <option disabled selected>--Choose Department--</option>
                     @foreach (var item in Model.Departments)
                     {
@@ -144,7 +145,7 @@
                     <img src="@Model.Employee.ProfileImage" alt="Your Image" />
                     <input type="file" name="ProfileImage" enctype="multipart/form-data" />
 
-                    @*@Html.ValidationMessageFor(model => model.ProfileImage, "", new { @class = "text-danger" })*@
+                    @Html.ValidationMessageFor(model => model.ProfileImage, "", new { @class = "text-danger" })
 
                 </td>
 

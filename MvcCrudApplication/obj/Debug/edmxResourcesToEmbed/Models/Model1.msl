@@ -36,6 +36,7 @@
     <EntitySetMapping Name="Employees">
       <EntityTypeMapping TypeName="AvidclanCompanyModel.Employee">
         <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="DepartmentNames" ColumnName="DepartmentNames" />
           <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
           <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
           <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />

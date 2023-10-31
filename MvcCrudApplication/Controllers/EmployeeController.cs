@@ -80,11 +80,9 @@ namespace MvcCrudApplication.Controllers
             }
         }
 
-
-
         [HttpPost]
         //    public ActionResult Saveemp(EmployeeModel employee)
-        public ActionResult Saveemp(Employee employee,EmployeeDepartment employeeDepartment, HttpPostedFileBase ProfileImage, int[] DepartmentsIds)
+        public ActionResult Saveemp(Employee employee, EmployeeDepartment employeeDepartment, HttpPostedFileBase ProfileImage, int[] DepartmentsIds)
         {
             // To open a connection to the database
             try
@@ -99,15 +97,15 @@ namespace MvcCrudApplication.Controllers
                     employeeDepartment.EmployeeId = employee.EmployeeId;
                     foreach (var value in DepartmentsIds)
                     {
-                        employeeDepartment.DepartmentId= value;
-                        context.EmployeeDepartment.Add(employeeDepartment);
+                        employeeDepartment.DepartmentId = value;
+                        context.EmployeeDepartments.Add(employeeDepartment);
                         context.SaveChanges();
                     }
                 }
                 if (ProfileImage != null && ProfileImage.ContentLength > 0)
                 {
                     string imagename = Path.GetFileName(ProfileImage.FileName);
-              //      var fileName = Path.GetFileName(ProfileImage.FileName);
+                    //      var fileName = Path.GetFileName(ProfileImage.FileName);
                     string imageext = Path.GetExtension(imagename);
 
                     //   string imgpath = Path.Combine(Server.MapPath("~/Images/Profile Images/"+employee.EmployeeId), imagename);
@@ -121,7 +119,7 @@ namespace MvcCrudApplication.Controllers
                         try
                         {
                             Directory.CreateDirectory(subfolderpath);
-                         //   string Text = "Subfolder created successfully.";
+                            //   string Text = "Subfolder created successfully.";
 
                             if (imageext == ".jpg" || imageext == ".png")
                             {
@@ -132,14 +130,14 @@ namespace MvcCrudApplication.Controllers
                                 //string saveloc=Server.MapPath(fullPath+"\\"+ imagename);
                                 string fullPath = Path.Combine(rootfolder, subfolderpath);
                                 string saveloc = Path.Combine(fullPath, imagename);
-                                  
+
                                 ProfileImage.SaveAs(saveloc);
 
                                 string newPath = Regex.Replace(saveloc, @"\\", "/");
 
-                           //     string path = "~/Images/Profile Images/" + employee.EmployeeId + "/"+imagename;
+                                //     string path = "~/Images/Profile Images/" + employee.EmployeeId + "/"+imagename;
 
-                                employee.ProfileImage=newPath;
+                                employee.ProfileImage = newPath;
 
                                 using (var context = new AvidclanCompanyEntities1())
                                 {
@@ -163,7 +161,7 @@ namespace MvcCrudApplication.Controllers
             }
             return RedirectToAction("ListView");
             //return View();
-        
+
         }
 
         [HttpGet]
@@ -175,22 +173,22 @@ namespace MvcCrudApplication.Controllers
 
                 var data1 = context.Departments.ToList();
 
+                foreach (var item in data)
+                {
+                    var matchingRecords = context.EmployeeDepartments.Where(o => o.EmployeeId == item.EmployeeId).ToList();
 
-                //foreach (var item in data)
-                //{
-                //   var matchingRecords = context.EmployeeDepartment.Where(o => o.EmployeeId== item.EmployeeId).ToList();
-                    
-                //    foreach(var item2 in matchingRecords)
-                //    {            
-                //        foreach (var item1 in data1)
-                //        {
-                //            var matchingRecords1 = context.Departments.Where(d => d.DepartmentId == item1.DepartmentId && d.DepartmentId == item2.DepartmentId).ToList();
+                    foreach (var item2 in matchingRecords)
+                    {
+                        foreach (var item1 in data1)
+                        {
+                            var matchingRecords1 = context.Departments.Where(d => d.DepartmentId == item1.DepartmentId && d.DepartmentId == item2.DepartmentId).ToList();
 
-                //          List<string> departmentNames = matchingRecords1.Select(d => d.DepartmentName).ToList();
+                            List<string> departmentNames = matchingRecords1.Select(d => d.DepartmentName).ToList();
+                            
 
-                //       }
-                //    }
-                //}
+                        }
+                    }
+                }
 
                 return View(data);
             }
@@ -198,13 +196,13 @@ namespace MvcCrudApplication.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            bool response=DeleteData(id);
-            if (response==true)
+            bool response = DeleteData(id);
+            if (response == true)
             {
                 return RedirectToAction("ListView");
             }
             return View();
-               
+
         }
         public bool DeleteData(int EmployeeId)
         {
@@ -214,111 +212,115 @@ namespace MvcCrudApplication.Controllers
                 // context.SaveChanges();
                 Console.WriteLine(EmployeeId);
                 Employee employee = context.Employees.Find(EmployeeId);
-      
+
                 EmployeeDepartment employeeDepartment = new EmployeeDepartment();
 
-                var empdepdata = context.EmployeeDepartment.FirstOrDefault(x => x.EmployeeId == EmployeeId);//fetching data
-                
-                context.EmployeeDepartment.Remove(empdepdata);
-                context.SaveChanges();
+                var empdepdata = context.EmployeeDepartments.Where(x => x.EmployeeId == EmployeeId).ToList();//fetching data
 
-                context.Employees.Remove(employee);
-                context.SaveChanges();
-
-                return true;  
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Edit(int? Id)
-        {
-            using (var context = new AvidclanCompanyEntities1())
-            {
-                var data = context.Employees.Where(x => x.EmployeeId == Id).SingleOrDefault();
-              // ViewData["Employee"] = data;
-
-                ViewModel model = new ViewModel();
-
-                var departments = context.Departments.ToList();
-
-                //var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
-                //ViewBag.Departments = selectedDepartment;
-
-                var data1 = context.Departments.ToList();
-                
-                model.Departments = data1;
-
-                if(data!=null)
+                if (empdepdata.Any())
                 {
-                    Employee employee = context.Employees.Find(Id);
-                    EmployeeDepartment employeedep = context.EmployeeDepartment.Find(Id);
-
-                  //  var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
-                   // ViewBag.Departments = selectedDepartment;
-                    model.Employee = data;
-                }
-                else
-                {
-                    Employee blankemployee = new Employee();
-                    model.Employee=blankemployee;
-                }
-                return View(model);
-            }
-        }
-
-       [HttpPost]
-        public ActionResult Edit(ViewModel model, HttpPostedFileBase ProfileImage, int[] DepartmentIds)
-        {
-            using (var context = new AvidclanCompanyEntities1())
-            {
-                //    // Use of lambda expression to access
-                //    // particular record from a database
-                var data = context.Employees.FirstOrDefault(x => x.EmployeeId == model.Employee.EmployeeId);
-
-                // Checking if any such record exist 
-                if (data != null)
-                {
-                    data.FirstName = model.Employee.FirstName;
-                    data.LastName = model.Employee.LastName;
-                    data.Address = model.Employee.Address;
-                    data.EmailAddress = model.Employee.EmailAddress;
-                    data.MobileNumber = model.Employee.MobileNumber;
-                    data.Gender = model.Employee.Gender;
-
-                    EmployeeDepartment employeeDepartment = new EmployeeDepartment();
-
-                    var empdepdata = context.EmployeeDepartment.FirstOrDefault(x => x.EmployeeId == model.Employee.EmployeeId);//fetching data
-
-                    context.EmployeeDepartment.Remove(empdepdata);
+                    context.EmployeeDepartments.RemoveRange(empdepdata);
                     context.SaveChanges();
 
-                    employeeDepartment.EmployeeId = model.Employee.EmployeeId;
+                    context.Employees.Remove(employee);
+                    context.SaveChanges();
 
-                    foreach (var value in DepartmentIds)
+                    return true;
+                }
+                return false;
+            }
+        }
+
+            [HttpGet]
+            public ActionResult Edit(int? Id)
+            {
+                using (var context = new AvidclanCompanyEntities1())
+                {
+                    var data = context.Employees.Where(x => x.EmployeeId == Id).SingleOrDefault();
+                    // ViewData["Employee"] = data;
+
+                    ViewModel model = new ViewModel();
+
+                    var departments = context.Departments.ToList();
+
+                    //var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
+                    //ViewBag.Departments = selectedDepartment;
+
+                    var data1 = context.Departments.ToList();
+
+                    model.Departments = data1;
+
+                    if (data != null)
                     {
-                        employeeDepartment.DepartmentId = value;
-                        context.EmployeeDepartment.Add(employeeDepartment);
-                        context.SaveChanges();
+                        Employee employee = context.Employees.Find(Id);
+                        EmployeeDepartment employeedep = context.EmployeeDepartments.Find(Id);
+
+                        //  var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
+                        // ViewBag.Departments = selectedDepartment;
+                        model.Employee = data;
                     }
-                    try
+                    else
                     {
-                        if (ProfileImage != null && ProfileImage.ContentLength > 0 || ProfileImage==null)
+                        Employee blankemployee = new Employee();
+                        model.Employee = blankemployee;
+                    }
+                    return View(model);
+                }
+            }
+
+            [HttpPost]
+            public ActionResult Edit(ViewModel model, HttpPostedFileBase ProfileImage, int[] DepartmentIds)
+            {
+                using (var context = new AvidclanCompanyEntities1())
+                {
+                    //    // Use of lambda expression to access
+                    //    // particular record from a database
+                    var data = context.Employees.FirstOrDefault(x => x.EmployeeId == model.Employee.EmployeeId);
+
+                    // Checking if any such record exist 
+                    if (data != null)
+                    {
+                        data.FirstName = model.Employee.FirstName;
+                        data.LastName = model.Employee.LastName;
+                        data.Address = model.Employee.Address;
+                        data.EmailAddress = model.Employee.EmailAddress;
+                        data.MobileNumber = model.Employee.MobileNumber;
+                        data.Gender = model.Employee.Gender;
+
+                        EmployeeDepartment employeeDepartment = new EmployeeDepartment();
+
+                        var empdepdata = context.EmployeeDepartments.FirstOrDefault(x => x.EmployeeId == model.Employee.EmployeeId);//fetching data
+
+                        context.EmployeeDepartments.Remove(empdepdata);
+                        context.SaveChanges();
+
+                        employeeDepartment.EmployeeId = model.Employee.EmployeeId;
+
+                        foreach (var value in DepartmentIds)
                         {
-                            string imagename = Path.GetFileName(ProfileImage.FileName);
-                            string imageext = Path.GetExtension(imagename);
-
-                            string rootfolder = Server.MapPath("~/Images/Profile Images/");
-                            string subfolderName = model.Employee.EmployeeId.ToString();
-                            string subfolderpath = Path.Combine(rootfolder, subfolderName);
-
-                            string[] files = Directory.GetFiles(subfolderpath);
-                            if (files.Length != 0)
+                            employeeDepartment.DepartmentId = value;
+                            context.EmployeeDepartments.Add(employeeDepartment);
+                            context.SaveChanges();
+                        }
+                        try
+                        {
+                            if (ProfileImage != null && ProfileImage.ContentLength > 0 || ProfileImage == null)
                             {
-                                foreach (string file in files)
+                                string imagename = Path.GetFileName(ProfileImage.FileName);
+                                string imageext = Path.GetExtension(imagename);
+
+                                string rootfolder = Server.MapPath("~/Images/Profile Images/");
+                                string subfolderName = model.Employee.EmployeeId.ToString();
+                                string subfolderpath = Path.Combine(rootfolder, subfolderName);
+
+                                string[] files = Directory.GetFiles(subfolderpath);
+                                if (files.Length != 0)
                                 {
-                                    System.IO.File.Delete(file);
+                                    foreach (string file in files)
+                                    {
+                                        System.IO.File.Delete(file);
+                                    }
                                 }
-                            }
                                 if (Directory.Exists(subfolderpath))
                                 {
                                     try
@@ -339,40 +341,36 @@ namespace MvcCrudApplication.Controllers
                                             string physicalPath = Server.MapPath(savenewloc1);
 
                                             model.Employee.ProfileImage = savenewloc1;
-                                        //ProfileImage.SaveAs(model.Employee.ProfileImage);
-                                            
+                                            //ProfileImage.SaveAs(model.Employee.ProfileImage);
+
                                             ProfileImage.SaveAs(physicalPath);
 
                                             context.Employees.AddOrUpdate(model.Employee);
                                             context.SaveChanges();
 
                                         }
-                                    
+
                                     }
-                                catch (Exception ex)
-                                {
-                                    var Text = "Error creating subfolder: " + ex.Message;
+                                    catch (Exception ex)
+                                    {
+                                        var Text = "Error creating subfolder: " + ex.Message;
+                                    }
                                 }
                             }
+                            context.Employees.AddOrUpdate(model.Employee);
+                            context.SaveChanges();
                         }
-                        context.Employees.AddOrUpdate(model.Employee);
-                        context.SaveChanges();
+                        catch (Exception ex)
+                        {
+                            var Text = "Error: " + ex.Message;
+                        }
+                        return RedirectToAction("ListView");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        var Text = "Error: " + ex.Message;
-                    }
-                    return RedirectToAction("ListView");
-                }
-                else
-                {
-                    try
-                    {
-                          //if(model.Employee.FirstName == null)
-                            //{
-                            //    ViewBag.FirstNameError = "First name is required.";
-                            //}
-                            // Add data to the particular table
+                        try
+                        {
+
                             context.Employees.Add(model.Employee);
                             context.SaveChanges();  // save the changes
 
@@ -383,7 +381,7 @@ namespace MvcCrudApplication.Controllers
                             foreach (var value in DepartmentIds)
                             {
                                 employeeDepartment.DepartmentId = value;
-                                context.EmployeeDepartment.Add(employeeDepartment);
+                                context.EmployeeDepartments.Add(employeeDepartment);
                                 context.SaveChanges();
                             }
 
@@ -437,25 +435,26 @@ namespace MvcCrudApplication.Controllers
                                     }
                                 }
                             }
-                        
-                        else
-                        {
-                            //var data1 = context.Departments.ToList();
-                            //return View(data1);
-                            return View(model);
-                           // return RedirectToAction("Edit");
-                            
+
+                            else
+                            {
+                                //var data1 = context.Departments.ToList();
+                                //return View(data1);
+                                return View(model);
+                                // return RedirectToAction("Edit");
+
+                            }
+                        }
+                        catch (Exception ex) {
+                            Console.WriteLine(ex.Message);
                         }
                     }
-                    catch (Exception ex) {
-                        Console.WriteLine(ex.Message);
-                    }
+                    return RedirectToAction("ListView");
                 }
-                return RedirectToAction("ListView");
             }
         }
-    }
 }
+
 
 
 //List<PgBean> pg = stmt.query(
