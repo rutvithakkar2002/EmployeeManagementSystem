@@ -28,7 +28,6 @@ namespace MvcCrudApplication.Models
         public string MobileNumber { get; set; }
         public string EmailAddress { get; set; }
         public string ProfileImage { get; set; }
-        public string DepartmentNames { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmployeeDepartment> EmployeeDepartments { get; set; }

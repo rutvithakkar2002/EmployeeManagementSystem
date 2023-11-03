@@ -3,12 +3,45 @@
 @{
     ViewBag.Title = "Edit";
 }
-
 <h2>Edit Employee</h2>
+<style>
+    .multiselect {
+        width: 200px;
+    }
+
+    .selectBox {
+        position: relative;
+    }
+
+        .selectBox select {
+            width: 150%;
+            font-weight: bold;
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+    }
+
+        #checkboxes label {
+            display: block;
+        }
+            #checkboxes label:hover {
+                background-color: #1e90ff;
+            }
+</style>
 
 <!--<form action="Updatedata" method="post"> -->
 
-@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", id = "myFormId" }))
 {
     <div class="form-horizontal">
 
@@ -21,37 +54,37 @@
             @Html.LabelFor(model => model.Employee.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
-            
+                @Html.ValidationMessageFor(model => model.EmployeeViewModel.FirstName, "", new { @class = "text-danger" })
+
             </div>
         </div>
-
+        <br />
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.EmployeeViewModel.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <br />
 
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.EmployeeViewModel.EmailAddress, "", new { @class = "text-danger" })
             </div>
         </div>
 
-
+        <br />
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.MobileNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Employee.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MobileNumber, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.EmployeeViewModel.MobileNumber, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <br />
         @*<div class="form-group">
             @Html.LabelFor(model => model.Employee.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -64,39 +97,12 @@
             @Html.RadioButtonFor(m => m.Employee.Gender, "Male") Male
             @Html.RadioButtonFor(m => m.Employee.Gender, "Female")Female
 
-            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.EmployeeViewModel.Gender, "", new { @class = "text-danger" })
 
         </div>
 
 
-        @*<tr>
-            <td>
-                <label>Gender</label>
-            </td>
-            <td>
-                <label>
-                    <input type="radio" value="female" name="Gender"> Female
-                </label>
-                <label>
-                    <input value="male" type="radio" name="Gender"> Male
-                </label>
-            </td>
-        </tr>*@
-
-
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Employee.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Employee.Address, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-        @*<div>
-            @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-1" })
-            @Html.TextAreaFor(m => m.Employee.Address)
-        </div>*@
-
+        <br />
 
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-1" })
@@ -108,12 +114,11 @@
                     @cols = 40,
                style = "border: 1px solid #ccc;"
                 })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.EmployeeViewModel.Address, "", new { @class = "text-danger" })
             </div>
         </div>
-
-
-        <tr>
+        <br />
+        @*<tr>
             <td>
                 <label>Department</label>
             </td>
@@ -126,17 +131,26 @@
                     }
                 </select>
             </td>
-        </tr>
+        </tr>*@
+
+        @*<label>Select DepartmentNames</label>
+        <br />
+        <div class="dropdown">
+            <button class="btn" onclick="toggleDropdown()">Select Options</button>
+            <div class="dropdown-content" id="dropdownContent">
+                @foreach (var item in Model.Departments)
+                {
+                    <label><input type="checkbox" value="@item.DepartmentId">@item.DepartmentName</label><br>
+                }
+            </div>
+        </div>*@
 
 
-
-        @*@Html.DropDownListFor(model => model.DepartmentId,Model.Department, "--Select --", new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })*@
 
         <div>
             <tr>
                 <td>
-                    <label>change profile image</label>
+                    <label>Change profile image</label>
 
                 </td>
 
@@ -145,20 +159,114 @@
                     <img src="@Model.Employee.ProfileImage" alt="Your Image" />
                     <input type="file" name="ProfileImage" enctype="multipart/form-data" />
 
-                    @Html.ValidationMessageFor(model => model.ProfileImage, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.EmployeeViewModel.ProfileImage, "", new { @class = "text-danger" })
 
                 </td>
 
             </tr>
 
         </div>
+        <br />
+
+        <label>Select DepartmentNames</label>
+        <div class="multiselect">
+            <div class="selectBox" onclick="showCheckboxes()">
+                <select>
+                    <option>Select an option</option>
+                </select>
+
+                <div class="overSelect"></div>
+            </div>
+
+            <input type="hidden" id="DepartmentIds" name="DepartmentIds" />
+            <div id="checkboxes">
+                @foreach (var item in Model.Departments)
+                {
+                    <label>
+                        <input type="checkbox" value=" @item.DepartmentId " onchange="updateSelectedValues()" />@item.DepartmentName
+                    </label>
+                }
+            </div>
+            @Html.ValidationMessageFor(model => model.EmployeeViewModel.DepartmentIds, "", new { @class = "text-danger" })
+
+
+        </div>
+        <br />
+
+        @*@Html.DropDownListFor(model => model.DepartmentId,Model.Department, "--Select --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })*@
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+                <button type="button" class="btn btn-primary" style="display: inline-block; background-color: black; padding: 20px; width: 130px; color: #ffffff; text-align: center;" onclick="calleditmethod()">Save</button> </div>
         </div>
     </div>
-
 }
+
+<script>
+    var expanded = false;
+    var DepartmentIds = [];
+    
+
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    } 
+    function updateSelectedValues() {
+        debugger;
+      // Clear the array before updating it
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                DepartmentIds.push(checkboxes[i].value);
+            }
+        }
+        DepartmentIds = DepartmentIds.filter((value, index, array) => array.indexOf(value) === index);
+
+        console.log(DepartmentIds); 
+      //  console.log(DepartmentIds); 
+        //calleditmethod()
+    }
+    function calleditmethod() {
+
+        var formData = new FormData($('#myFormId')[0]); // Serialize the form data
+        debugger;
+        // Add the DepartmentIds to the formData
+        formData.append("DepartmentIds", DepartmentIds);
+
+       // formData.append("DepartmentIds", DepartmentIds);
+       // console.log(formData);  
+
+        $.ajax({
+            url: '/Employee/Edit', // Replace with your controller and action name
+            type: 'POST',
+            data: formData,
+            traditional: true,
+            contentType: false, 
+            processData: false,
+            success: function (data) {
+                if (data.success) {
+                    alert(data.message); // Display the success message
+                    // Redirect to the specified URL
+                    window.location.href = data.redirect;
+                } else {
+                    // Handle errors here
+                    console.error(data.message);
+                }
+            },
+            error: function (error) {
+                // Handle any errors
+                console.error(error);
+            }
+        });
+    }
+</script>
+
+

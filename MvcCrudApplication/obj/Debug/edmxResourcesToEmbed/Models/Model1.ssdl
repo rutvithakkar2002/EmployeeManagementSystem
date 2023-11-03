@@ -19,7 +19,6 @@
     <Property Name="MobileNumber" Type="varchar" MaxLength="10" />
     <Property Name="EmailAddress" Type="varchar" MaxLength="100" />
     <Property Name="ProfileImage" Type="varchar" MaxLength="1000" />
-    <Property Name="DepartmentNames" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="EmployeeDepartment">
     <Key>

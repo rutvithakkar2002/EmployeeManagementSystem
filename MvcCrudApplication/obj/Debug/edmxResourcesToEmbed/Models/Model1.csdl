@@ -75,7 +75,6 @@
     <Property Name="MobileNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="ProfileImage" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
-    <Property Name="DepartmentNames" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="EmployeeDepartments" Relationship="AvidclanCompanyModel.FK_EmployeeDepartment_EmployeeDepartment" FromRole="Employee" ToRole="EmployeeDepartment" />
   </EntityType>
   <EntityType Name="EmployeeDepartment">

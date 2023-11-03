@@ -1,5 +1,5 @@
-﻿@model List<MvcCrudApplication.Models.Employee>
-
+﻿@model List<MvcCrudApplication.Models.EmpListViewModel>
+@*@model MvcCrudApplication.Models.ViewModel*@
 
 @{
     ViewBag.Title = "ListView";
@@ -141,7 +141,7 @@
             <th>Gender</th>
             <th>Address</th>
             <th>MobileNumber</th>
-            <th>DepartmentName</th>
+            <th>Departments</th>
             <th>ProfileImage</th>
             <th>Imageview</th>
 
@@ -162,6 +162,8 @@
                 <td>@Html.DisplayFor(modelItem => @emp.Gender)</td>
                 <td>@Html.DisplayFor(modelItem => @emp.Address)</td>
                 <td>@Html.DisplayFor(modelItem => @emp.MobileNumber)</td>
+                <td>@Html.DisplayFor(modelItem => @emp.Departments)</td>
+
 
                 @*<td>@departmentList</td>*@
                 @*   <td>@Html.DisplayFor(modelItem => @emp.DepartmentId)</td>*@
@@ -169,22 +171,22 @@
 
                 <td>@Html.DisplayFor(modelItem => @emp.ProfileImage)</td>
                 <td><img src="@emp.ProfileImage" width="50"></td>
-                @*<td><img src="~/Images/Profile Images/1051/1523126565865.jpg" width="50"></td>*@
-
-                @*<td><img src="~/Images/Profile Images/1051/1523126565865.jpg" width="50"></td>*@
-
+               
                 <td>
-                    @*@Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId, href = "#myModal",@class="trigger-btn" ,data_toggle="modal"})|*@
+
 
                     @Html.HiddenFor(model => emp.EmployeeId)
 
-                    @*@Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId }, new { @class = "btn btn-danger delete-link", data_target = "#myModal", data_toggle = "modal" })|*@
 
-                    @Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId }, new { @class = "btn btn-danger delete-link", onclick = "confirmDelete()" })
 
+                    @*@Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId }, new { @class = "btn btn-danger delete-link", onclick = "confirmDelete()" })*@
+                    
+              
+                    <a href="javascript:void(0);" onclick="confirmDelete('@emp.EmployeeId')">Delete</a>
+                    
                     @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeId })
 
-                    <!--  <a href="DeleteData/{ id = emp.EmployeeId }">Delete</a>-->
+
 
                 </td>
             </tr>
@@ -212,38 +214,52 @@
             </div>
         </div>*@
 
-    <script>
-        function confirmDelete() {
+<script>
+    function confirmDelete(employeeId) {
 
-            if (confirm("Are You sure you want to delete this record?") == true) {
+            debugger;
 
-                deleteEmployee();
+        if (confirm("Are You sure you want to delete this record?") == true) {
 
-            }
-            else {
-               // cancelView();
-            }
+            deleteEmployee(employeeId);
 
         }
+      
+    }
 
         function deleteEmployee(employeeId) {
             // Send the DELETE request
-
+            debugger;
             const apiUrl = `/Employee/Delete/${employeeId}`;
 
             fetch(apiUrl, {
-                method: 'DELETE'
+                method: 'GET'
             })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json().then(data => {
+                            if (data.success) {
+                                alert(data.message); // Display the success message
+                                // Redirect to the specified URL
+                                window.location.href = data.redirect;
+                            } else {
+                                // Handle errors here
+                                console.error('Failed to delete the employee.');
+                            }
+                        });
+                    } else {
+                        // Handle errors here
+                        console.error('Failed to delete the employee.');
+                    }
+                })
+                .catch(error => {
+                    console.error('An error occurred while deleting the employee:', error);
+                });
+
         }
 
 
-        function cancelView() {
-
-            const apiUrl = `/Employee/ListView`;
-
-        }
-
-    </script>
+</script>
 
 
 </body>

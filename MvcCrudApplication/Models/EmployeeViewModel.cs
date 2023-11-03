@@ -29,6 +29,10 @@ namespace MvcCrudApplication.Models
         [Required(ErrorMessage = "pls ProfileImage attached.")]
         public string ProfileImage { get; set; }
 
+        [Required(ErrorMessage = "Please select at least one department.")]
+        public string DepartmentIds { get; set; }
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmployeeDepartment> EmployeeDepartments { get; set; }
     }
