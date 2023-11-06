@@ -53,17 +53,19 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Employee.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployeeViewModel.FirstName, "", new { @class = "text-danger" })
-
+                @Html.EditorFor(model => model.Employee.FirstName, new { htmlAttributes = new { @class = "form-control", @required = "required" } } )
+                @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.FirstName, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
             </div>
         </div>
         <br />
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Employee.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployeeViewModel.LastName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Employee.LastName, new { htmlAttributes = new { @class = "form-control" , @required = "required" } })
+                @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.LastName, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
             </div>
         </div>
         <br />
@@ -71,8 +73,10 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Employee.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployeeViewModel.EmailAddress, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Employee.EmailAddress, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.EmailAddress, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+
             </div>
         </div>
 
@@ -80,8 +84,10 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Employee.MobileNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Employee.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployeeViewModel.MobileNumber, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Employee.MobileNumber, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.MobileNumber, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.MobileNumber, "", new { @class = "text-danger" })
+
             </div>
         </div>
         <br />
@@ -93,13 +99,13 @@
             </div>
         </div>*@
 
-        <div class="form-group">
-            @Html.RadioButtonFor(m => m.Employee.Gender, "Male") Male
-            @Html.RadioButtonFor(m => m.Employee.Gender, "Female")Female
+    <div class="form-group">
+        @Html.RadioButtonFor(m => m.Employee.Gender, "Male") Male
+        @Html.RadioButtonFor(m => m.Employee.Gender, "Female")Female
 
-            @Html.ValidationMessageFor(model => model.EmployeeViewModel.Gender, "", new { @class = "text-danger" })
-
-        </div>
+        @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.Gender, "", new { @class = "text-danger" })*@
+        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+    </div>
 
 
         <br />
@@ -108,13 +114,16 @@
             @Html.LabelFor(model => model.Employee.Address, htmlAttributes: new { @class = "control-label col-md-1" })
             <div class="col-md-10">
                 @Html.TextAreaFor(model => model.Employee.Address, new
-                {
-                    @class = "form-control",
-                    @rows = 5,
-                    @cols = 40,
-               style = "border: 1px solid #ccc;"
-                })
-                @Html.ValidationMessageFor(model => model.EmployeeViewModel.Address, "", new { @class = "text-danger" })
+           {
+               @class = "form-control",
+               @rows = 5,
+               @cols = 40,
+               style = "border: 1px solid #ccc;",
+               @required = "required"
+           })
+                @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.Address, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
             </div>
         </div>
         <br />
@@ -145,8 +154,6 @@
             </div>
         </div>*@
 
-
-
         <div>
             <tr>
                 <td>
@@ -157,10 +164,10 @@
                 <td>
 
                     <img src="@Model.Employee.ProfileImage" alt="Your Image" />
-                    <input type="file" name="ProfileImage" enctype="multipart/form-data" />
+                    <input type="file" name="ProfileImage" enctype="multipart/form-data" required />
 
-                    @Html.ValidationMessageFor(model => model.EmployeeViewModel.ProfileImage, "", new { @class = "text-danger" })
-
+                    @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.ProfileImage, "", new { @class = "text-danger" })*@
+                    @Html.ValidationMessageFor(model => model.ProfileImage, "", new { @class = "text-danger" })
                 </td>
 
             </tr>
@@ -171,7 +178,7 @@
         <label>Select DepartmentNames</label>
         <div class="multiselect">
             <div class="selectBox" onclick="showCheckboxes()">
-                <select>
+                <select required>
                     <option>Select an option</option>
                 </select>
 
@@ -182,24 +189,24 @@
             <div id="checkboxes">
                 @foreach (var item in Model.Departments)
                 {
+                    bool isSelected = Model.PreselectedDepartmentIds != null && Model.PreselectedDepartmentIds.Contains(item.DepartmentId); // Check if the department should be preselected
+
                     <label>
-                        <input type="checkbox" value=" @item.DepartmentId " onchange="updateSelectedValues()" />@item.DepartmentName
+                        <input type="checkbox" value=" @item.DepartmentId " onchange="updateSelectedValues()" @(isSelected ? "checked" : "") />@item.DepartmentName
                     </label>
                 }
             </div>
-            @Html.ValidationMessageFor(model => model.EmployeeViewModel.DepartmentIds, "", new { @class = "text-danger" })
-
+            @*@Html.ValidationMessageFor(model => model.EmployeeViewModel.DepartmentIds, "", new { @class = "text-danger" })*@
+            @Html.ValidationMessageFor(model => model.PreselectedDepartmentIds, "", new { @class = "text-danger" })
 
         </div>
         <br />
 
         @*@Html.DropDownListFor(model => model.DepartmentId,Model.Department, "--Select --", new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })*@
-
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="button" class="btn btn-primary" style="display: inline-block; background-color: black; padding: 20px; width: 130px; color: #ffffff; text-align: center;" onclick="calleditmethod()">Save</button> </div>
+                <button type="button" id="submitbtn" class="btn btn-primary" style="display: inline-block; background-color: black; padding: 20px; width: 130px; color: #ffffff; text-align: center;" onclick="calleditmethod()">Save</button> </div>
         </div>
     </div>
 }
@@ -242,7 +249,20 @@
         formData.append("DepartmentIds", DepartmentIds);
 
        // formData.append("DepartmentIds", DepartmentIds);
-       // console.log(formData);  
+       // console.log(formData);
+
+
+        //var FirstName = document.getElementById("FirstName").value;
+        //var LastName = document.getElementById("LastName").value;
+
+        //if (FirstName === null || FirstName.trim() === "") {
+        //    alert("FirstName can't be blank");
+        //    return false;
+        //} else if (LastName === null || LastName.trim() === "") {
+        //    alert("LastName can't be blank");
+        //    return false;
+        //}
+
 
         $.ajax({
             url: '/Employee/Edit', // Replace with your controller and action name

@@ -299,8 +299,31 @@ namespace MvcCrudApplication.Controllers
                 {
                     Employee employee = context.Employees.Find(Id);
                     EmployeeDepartment employeedep = context.EmployeeDepartments.Find(Id);
+                    List<Employee> employees = context.Employees.ToList();
+                    List<int> departmentIds = new List<int>();
+                    //foreach (var item in employees)
+                    //{
+                    //    var matchingRecords = context.EmployeeDepartments.Where(o => o.EmployeeId == item.EmployeeId).ToList();
+                    //    foreach (var item2 in matchingRecords)
+                    //    {
+                    //        // Initialize an empty list
+                    //        foreach (var item1 in data1)
+                    //        {
+                    //            if (item1.DepartmentId == item2.DepartmentId)
+                    //            {
+                    //                model.PreselectedDepartmentIds.Add(item1.DepartmentId);
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    var preselectedDepartmentIds = context.EmployeeDepartments
+                           .Where(ed => ed.EmployeeId == Id)
+                           .Select(ed => ed.DepartmentId)
+                           .ToList();
 
-                    //  var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
+                    model.PreselectedDepartmentIds = preselectedDepartmentIds;
+
+                    //var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
                     // ViewBag.Departments = selectedDepartment;
                     model.Employee = data;
                 }
@@ -335,6 +358,8 @@ namespace MvcCrudApplication.Controllers
 
                 var data = context.Employees.FirstOrDefault(x => x.EmployeeId == model.Employee.EmployeeId);
 
+                Employee employee = context.Employees.Find(model.Employee.EmployeeId);
+
                 // Checking if any such record exist 
                 if (data != null)
                 {
@@ -344,6 +369,66 @@ namespace MvcCrudApplication.Controllers
                     data.EmailAddress = model.Employee.EmailAddress;
                     data.MobileNumber = model.Employee.MobileNumber;
                     data.Gender = model.Employee.Gender;
+
+                    //if (model.Employee.ProfileImage != null)
+                    //{
+                    //    data.ProfileImage = model.Employee.ProfileImage;
+                    //}
+                    if (ProfileImage == null)
+                    {
+                        model.Employee.ProfileImage = data.ProfileImage;
+                    }
+                    else
+                    { 
+                        string imagename = Path.GetFileName(ProfileImage.FileName);
+                        string imageext = Path.GetExtension(imagename);
+                        string rootfolder = Server.MapPath("~/Images/Profile Images/");
+                        string subfolderName = model.Employee.EmployeeId.ToString();
+                        string subfolderpath = Path.Combine(rootfolder, subfolderName);
+
+                        string[] files = Directory.GetFiles(subfolderpath);
+                        if (files.Length != 0)
+                        {
+                            foreach (string file in files)
+                            {
+                                System.IO.File.Delete(file);
+                            }
+                        }
+                        if (Directory.Exists(subfolderpath))
+                        {
+                            try
+                            {
+                                if (imageext == ".jpg" || imageext == ".png")
+                                {
+                                    string fullPath = Path.Combine(rootfolder, subfolderpath);
+                                    string saveloc = Path.Combine(fullPath, imagename);
+
+                                    string rootfolder1 = "/Images/Profile Images/";
+                                    string subfolderName1 = model.Employee.EmployeeId.ToString();
+                                    string subfolderpath1 = Path.Combine(rootfolder1, subfolderName1);
+
+                                    string savenewloc = Path.Combine(subfolderpath1, imagename);
+
+                                    string savenewloc1 = Regex.Replace(savenewloc, @"\\", "/");
+
+                                    string physicalPath = Server.MapPath(savenewloc1);
+
+                                    model.Employee.ProfileImage = savenewloc1;
+                                    //ProfileImage.SaveAs(model.Employee.ProfileImage);
+
+                                    ProfileImage.SaveAs(physicalPath);
+
+                                    context.Employees.AddOrUpdate(model.Employee);
+                                    context.SaveChanges();
+                                }
+                            }
+
+                            catch (Exception ex)
+                            {
+                                var Text = "Error creating subfolder: " + ex.Message;
+                            }
+                        }
+                    }
 
                     EmployeeDepartment employeeDepartment = new EmployeeDepartment();
 
@@ -362,59 +447,60 @@ namespace MvcCrudApplication.Controllers
                     }
                     try
                     {
-                        if (ProfileImage != null && ProfileImage.ContentLength > 0 || ProfileImage == null)
-                        {
-                            string imagename = Path.GetFileName(ProfileImage.FileName);
-                            string imageext = Path.GetExtension(imagename);
+                        // if (ProfileImage != null && ProfileImage.ContentLength > 0 || ProfileImage == null)
+                        //if(model.Employee.ProfileImage != null)
+                        //{
+                        //    string imagename = Path.GetFileName(ProfileImage.FileName);
+                        //    string imageext = Path.GetExtension(imagename);
 
-                            string rootfolder = Server.MapPath("~/Images/Profile Images/");
-                            string subfolderName = model.Employee.EmployeeId.ToString();
-                            string subfolderpath = Path.Combine(rootfolder, subfolderName);
+                        //    string rootfolder = Server.MapPath("~/Images/Profile Images/");
+                        //    string subfolderName = model.Employee.EmployeeId.ToString();
+                        //    string subfolderpath = Path.Combine(rootfolder, subfolderName);
 
-                            string[] files = Directory.GetFiles(subfolderpath);
-                            if (files.Length != 0)
-                            {
-                                foreach (string file in files)
-                                {
-                                    System.IO.File.Delete(file);
-                                }
-                            }
-                            if (Directory.Exists(subfolderpath))
-                            {
-                                try
-                                {
-                                    if (imageext == ".jpg" || imageext == ".png")
-                                    {
-                                        string fullPath = Path.Combine(rootfolder, subfolderpath);
-                                        string saveloc = Path.Combine(fullPath, imagename);
+                        //    string[] files = Directory.GetFiles(subfolderpath);
+                        //    if (files.Length != 0)
+                        //    {
+                        //        foreach (string file in files)
+                        //        {
+                        //            System.IO.File.Delete(file);
+                        //        }
+                        //    }
+                        //    if (Directory.Exists(subfolderpath))
+                        //    {
+                        //        try
+                        //        {
+                        //            if (imageext == ".jpg" || imageext == ".png")
+                        //            {
+                        //                string fullPath = Path.Combine(rootfolder, subfolderpath);
+                        //                string saveloc = Path.Combine(fullPath, imagename);
 
-                                        string rootfolder1 = "/Images/Profile Images/";
-                                        string subfolderName1 = model.Employee.EmployeeId.ToString();
-                                        string subfolderpath1 = Path.Combine(rootfolder1, subfolderName1);
+                        //                string rootfolder1 = "/Images/Profile Images/";
+                        //                string subfolderName1 = model.Employee.EmployeeId.ToString();
+                        //                string subfolderpath1 = Path.Combine(rootfolder1, subfolderName1);
 
-                                        string savenewloc = Path.Combine(subfolderpath1, imagename);
+                        //                string savenewloc = Path.Combine(subfolderpath1, imagename);
 
-                                        string savenewloc1 = Regex.Replace(savenewloc, @"\\", "/");
+                        //                string savenewloc1 = Regex.Replace(savenewloc, @"\\", "/");
 
-                                        string physicalPath = Server.MapPath(savenewloc1);
+                        //                string physicalPath = Server.MapPath(savenewloc1);
 
-                                        model.Employee.ProfileImage = savenewloc1;
-                                        //ProfileImage.SaveAs(model.Employee.ProfileImage);
+                        //                model.Employee.ProfileImage = savenewloc1;
+                        //                //ProfileImage.SaveAs(model.Employee.ProfileImage);
 
-                                        ProfileImage.SaveAs(physicalPath);
+                        //                ProfileImage.SaveAs(physicalPath);
 
-                                        context.Employees.AddOrUpdate(model.Employee);
-                                        context.SaveChanges();
+                        //                context.Employees.AddOrUpdate(model.Employee);
+                        //                context.SaveChanges();
 
-                                    }
+                        //            }
 
-                                }
-                                catch (Exception ex)
-                                {
-                                    var Text = "Error creating subfolder: " + ex.Message;
-                                }
-                            }
-                        }
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            var Text = "Error creating subfolder: " + ex.Message;
+                        //        }
+                        //    }
+                        //}
                         context.Employees.AddOrUpdate(model.Employee);
                         context.SaveChanges();
                     }
@@ -422,7 +508,11 @@ namespace MvcCrudApplication.Controllers
                     {
                         var Text = "Error: " + ex.Message;
                     }
-                    return RedirectToAction("ListView");
+                    string redirectUrl1 = Url.Action("ListView", "Employee");
+
+                    // Create a JSON response that includes the URL
+                    var result1 = new { success = true, message = "save successful", redirect = redirectUrl1 };
+                    return Json(result1);
                 }
                 else
                 {
@@ -431,74 +521,80 @@ namespace MvcCrudApplication.Controllers
                         //if (ModelState.IsValid)
                         //{ //checking model state
 
-                        context.Employees.Add(model.Employee);
-                        context.SaveChanges();  // save the changes
+                            context.Employees.Add(model.Employee);
+                            context.SaveChanges();  // save the changes
 
-                        EmployeeDepartment employeeDepartment = new EmployeeDepartment();
+                            EmployeeDepartment employeeDepartment = new EmployeeDepartment();
 
-                        employeeDepartment.EmployeeId = model.Employee.EmployeeId;
+                            employeeDepartment.EmployeeId = model.Employee.EmployeeId;
 
-                        foreach (var value in DepartmentIds)
-                        {
-                            employeeDepartment.DepartmentId = value;
-                            context.EmployeeDepartments.Add(employeeDepartment);
-                            context.SaveChanges();
-                        }
-
-                        if (ProfileImage != null && ProfileImage.ContentLength > 0)
-                        {
-                            string imagename = Path.GetFileName(ProfileImage.FileName);
-                            //      var fileName = Path.GetFileName(ProfileImage.FileName);
-                            string imageext = Path.GetExtension(imagename);
-
-                            //   string imgpath = Path.Combine(Server.MapPath("~/Images/Profile Images/"+employee.EmployeeId), imagename);
-
-                            string rootfolder = Server.MapPath("~/Images/Profile Images/");
-                            string subfolderName = model.Employee.EmployeeId.ToString();
-                            string subfolderpath = Path.Combine(rootfolder, subfolderName);
-
-                            if (!Directory.Exists(subfolderpath))
+                            foreach (var value in DepartmentIds)
                             {
-                                try
-                                {
-                                    Directory.CreateDirectory(subfolderpath);
-                                    //   string Text = "Subfolder created successfully.";
-
-                                    if (imageext == ".jpg" || imageext == ".png")
-                                    {
-                                        // Specify the folder where you want to store the image
-                                        // string folderPath = Server.MapPath(subfolderpath); // Change this path as needed
-
-                                        //string fullPath = Path.Combine(subfolderpath, imagename);
-                                        //string saveloc=Server.MapPath(fullPath+"\\"+ imagename);
-                                        string fullPath = Path.Combine(rootfolder, subfolderpath);
-                                        string saveloc = Path.Combine(fullPath, imagename);
-
-                                        string rootfolder1 = "/Images/Profile Images/";
-                                        string subfolderName1 = model.Employee.EmployeeId.ToString();
-                                        string subfolderpath1 = Path.Combine(rootfolder1, subfolderName1);
-                                        string savenewloc = Path.Combine(subfolderpath1, imagename);
-                                        string savenewloc1 = Regex.Replace(savenewloc, @"\\", "/");
-                                        string physicalPath = Server.MapPath(savenewloc1);
-
-                                        ProfileImage.SaveAs(physicalPath);
-                                        //     string path = "~/Images/Profile Images/" + employee.EmployeeId + "/"+imagename;
-                                        model.Employee.ProfileImage = savenewloc1;
-
-                                        context.Employees.AddOrUpdate(model.Employee);
-                                        context.SaveChanges();
-
-
-
-
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine(ex.Message);
-                                }
-
+                                employeeDepartment.DepartmentId = value;
+                                context.EmployeeDepartments.Add(employeeDepartment);
+                                context.SaveChanges();
                             }
+                            if (ProfileImage != null && ProfileImage.ContentLength > 0)
+                            {
+                                string imagename = Path.GetFileName(ProfileImage.FileName);
+                                //      var fileName = Path.GetFileName(ProfileImage.FileName);
+                                string imageext = Path.GetExtension(imagename);
+                                //   string imgpath = Path.Combine(Server.MapPath("~/Images/Profile Images/"+employee.EmployeeId), imagename);
+                                string rootfolder = Server.MapPath("~/Images/Profile Images/");
+                                string subfolderName = model.Employee.EmployeeId.ToString();
+                                string subfolderpath = Path.Combine(rootfolder, subfolderName);
+
+                                if (!Directory.Exists(subfolderpath))
+                                {
+                                    try
+                                    {
+                                        Directory.CreateDirectory(subfolderpath);
+                                        //   string Text = "Subfolder created successfully.";
+
+                                        if (imageext == ".jpg" || imageext == ".png")
+                                        {
+                                            // Specify the folder where you want to store the image
+                                            // string folderPath = Server.MapPath(subfolderpath); // Change this path as needed
+
+                                            //string fullPath = Path.Combine(subfolderpath, imagename);
+                                            //string saveloc=Server.MapPath(fullPath+"\\"+ imagename);
+                                            string fullPath = Path.Combine(rootfolder, subfolderpath);
+                                            string saveloc = Path.Combine(fullPath, imagename);
+
+                                            string rootfolder1 = "/Images/Profile Images/";
+                                            string subfolderName1 = model.Employee.EmployeeId.ToString();
+                                            string subfolderpath1 = Path.Combine(rootfolder1, subfolderName1);
+                                            string savenewloc = Path.Combine(subfolderpath1, imagename);
+                                            string savenewloc1 = Regex.Replace(savenewloc, @"\\", "/");
+                                            string physicalPath = Server.MapPath(savenewloc1);
+
+                                            ProfileImage.SaveAs(physicalPath);
+                                            //     string path = "~/Images/Profile Images/" + employee.EmployeeId + "/"+imagename;
+                                            model.Employee.ProfileImage = savenewloc1;
+                                            context.Employees.AddOrUpdate(model.Employee);
+                                            context.SaveChanges();
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(ex.Message);
+                                    }
+
+                                }
+                            }
+                     //   }
+                        else
+                        {
+                            //return View(model);
+
+                            var departments = context.Departments.ToList();
+
+                            //var selectedDepartment = new SelectList(departments, "DepartmentID", "DepartmentName", employeedep.DepartmentId);
+                            //ViewBag.Departments = selectedDepartment;
+
+                            var data1 = context.Departments.ToList();
+                            model.Departments = data1;
+                            return View("Edit",model);
                         }
                     }
                     catch (Exception ex)
@@ -506,18 +602,15 @@ namespace MvcCrudApplication.Controllers
                         Console.WriteLine(ex.Message);
                     }
                 }
-
                 string redirectUrl = Url.Action("ListView", "Employee");
-
                 // Create a JSON response that includes the URL
                 var result = new { success = true, message = "save successful", redirect = redirectUrl };
                 return Json(result);
             }
-            
+
         }
     }
 }
-
 
 
 //List<PgBean> pg = stmt.query(

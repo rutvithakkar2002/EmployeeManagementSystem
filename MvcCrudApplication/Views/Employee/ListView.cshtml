@@ -151,7 +151,6 @@
         @foreach (var emp in Model)
         {
             <tr>
-
                 <td>
                     @Html.DisplayFor(modelItem => @emp.EmployeeId)
                 </td>
@@ -174,19 +173,13 @@
                
                 <td>
 
-
                     @Html.HiddenFor(model => emp.EmployeeId)
-
-
 
                     @*@Html.ActionLink("Delete", "Delete", new { id = emp.EmployeeId }, new { @class = "btn btn-danger delete-link", onclick = "confirmDelete()" })*@
                     
-              
                     <a href="javascript:void(0);" onclick="confirmDelete('@emp.EmployeeId')">Delete</a>
                     
                     @Html.ActionLink("Edit", "Edit", new { id = emp.EmployeeId })
-
-
 
                 </td>
             </tr>
